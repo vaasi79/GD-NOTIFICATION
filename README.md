@@ -1,28 +1,100 @@
-# Game-Day-Notification-System
+✅ Step 1:Set Up IAM Roles and Permissions:
 
-![391754276-5e19635e-0685-4c07-9601-330f7d1231f9](https://github.com/user-attachments/assets/3b02a6ef-4557-499d-84dc-2fb19671ae44)
+Create an IAM role for Lambda with permissions for:
 
-# Project Overview
+AWSLambdaBasicExecutionRole (for logging to CloudWatch)
 
-This project is an alert system that sends real-time NBA game day score notifications to subscribed users via SMS/Email. It uses an external API to fetch live game scores and sends updates using AWS services.
+AmazonSNSFullAccess
 
-# Features
+Create a custom policy (if needed) to follow least privilege principles.
 
-* Fetches live NBA game scores using an external API.
+✅ Step 2: Configure Amazon SNS (Simple Notification Service)
+Create an SNS Topic:
 
-* Sends formatted score updates to subscribers via SMS/Email using Amazon SNS.
+Go to SNS → Create topic (e.g., GameDayNotificationTopic)
 
-* Scheduled automation for regular updates using Amazon EventBridge.
+Subscribe Email IDs:
 
-* Securely configured with least privilege IAM roles.
+Add subscriber emails.
 
-# Technologies
+Confirm subscriptions via the email link.
 
-* Programming Language: Python 3.x
+✅ Step 3: Develop the Lambda Function
+Use Python or Node.js (Python recommended).
 
-* Services: AWS Lambda, Amazon SNS, Amazon EventBridge
+Install Dependencies:
 
-* External API: NBA Game API (SportsData.io)
+If using external APIs like balldontlie.io, you may need requests (for Python).
 
+Code Logic:
 
-Reference Github repo: https://github.com/ifeanyiro9/game-day-notifications.git
+Call the external NBA game API.
+
+Parse JSON response.
+
+Classify games: Final, Live, Scheduled.
+
+Extract:
+
+Teams
+
+Scores
+
+Start time
+
+Channel
+
+Quarter-wise scores
+
+Format as human-readable text.
+
+Publish to SNS topic.
+
+✅ Step 4: Set Up EventBridge for Scheduling
+Go to EventBridge → Rules → Create Rule
+
+Name it (e.g., GameDayTrigger)
+
+Choose Schedule → Fixed Rate or Cron expression (e.g., 0 16 * * ? * for 4 PM daily UTC).
+
+Add Target:
+
+Select Lambda Function
+
+Choose your function
+
+✅ Step 5: Monitoring with CloudWatch
+CloudWatch Logs:
+
+Enable logging in your Lambda to track:
+
+API responses
+
+Error messages
+
+Notifications sent
+
+Create Log Group (optional): For organized logging.
+
+Set Alarms (future enhancement): For Lambda failures or API issues.
+
+✅ Step 6: Test End-to-End
+Run Lambda manually first using test events.
+
+Check SNS Email delivery.
+
+Review CloudWatch logs for validation or errors.
+
+✅ Step 7: Document and Maintain
+Document Environment Setup (IAM, SNS, EventBridge).
+
+Keep API keys/configs in AWS Secrets Manager or Lambda environment variables.
+
+Track Enhancements:
+
+Personalized updates (by team)
+
+SMS/Push notifications
+
+Web dashboard
+
