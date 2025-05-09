@@ -1,3 +1,4 @@
+![Architecture Diagram](https://github.com/vaasi79/GD-NOTIFICATION/blob/main/architecture.jpg?raw=true)
 ✅ Step 1:Set Up IAM Roles and Permissions:
 
 Create an IAM role for Lambda with permissions for:
